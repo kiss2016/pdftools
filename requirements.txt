@@ -1,4 +1,4 @@
 PyPDF2==1.26.0
-PyMuPDF==1.18.14
-pdf2docx==0.5.2
+pymupdf==1.22.5
+pdf2docx==0.5.6
 PyQt5==5.15.6
