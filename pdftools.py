@@ -1,14 +1,14 @@
 # -*- coding:utf-8*-
-
 import os
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import time
 import sys
 import warnings
-from PyQt5.QtWidgets import QApplication, QDialog
+from PySide6.QtWidgets import QApplication, QDialog
 from ui_mainwinmergepdf import Ui_MainWindow
 from pdf2docx import Converter
 import fitz
+
 
 if not sys.warnoptions:
     warnings.simplefilter("ignore")
@@ -91,35 +91,37 @@ class MainDialog(QDialog):
         if pdf_file is None or pdf_file == '':
             self.ui.printf("请先选择pdf文件")
         else:
-            docx_file = os.path.splitext(pdf_file)[0] + '.docx'
-            cv = Converter(pdf_file)
-            cv.convert(docx_file, start=0, end=None)
-            cv.close()
-            self.ui.printf(f"pdf转换word完成！")
-            self.ui.printf(f"转换后word路径：{docx_file}\n")
+            try:
+                docx_file = os.path.splitext(pdf_file)[0] + '.docx'
+                cv = Converter(pdf_file)
+                cv.convert(docx_file, start=0, end=None)
+                cv.close()
+                self.ui.printf(f"pdf转换word完成！")
+                self.ui.printf(f"转换后word路径：{docx_file}\n")
+            except Exception as e:
+                self.ui.printf(f"转换异常：{e}")
 
     # 使用fitz将pdf转为图片
     def getpdfpath1(self):
         pdffilepath = self.ui.pdfpath.text()
         return pdffilepath
 
-    def pdf2png(self,pdfpath, zoom_x=2.0, zoom_y=2.0, rotation_angle=0):
+    def pdf2png(self,pdfpath, zoom_x=10.0, zoom_y=10.0, rotation_angle=0):
         self.ui.printf(f"开始pdf转图片...")
         currentpath = os.path.split(pdfpath)[0].replace('/', '\\')
         imgPath = os.path.join(currentpath, 'image\\')
         if not os.path.exists(imgPath):
             os.makedirs(imgPath)
-        # imgPath = r"D:\liums\test\testword\image\\"
         # 打开PDF文件
         pdf = fitz.open(pdfpath)
         # 逐页读取PDF
-        for pg in range(0, pdf.pageCount):
+        for pg in range(0, pdf.page_count):
             page = pdf[pg]
             # 设置缩放和旋转系数
-            trans = fitz.Matrix(zoom_x, zoom_y).preRotate(rotation_angle)
-            pm = page.getPixmap(matrix=trans, alpha=False)
+            trans = fitz.Matrix(zoom_x, zoom_y).prerotate(rotation_angle)
+            pm = page.get_pixmap(matrix=trans, alpha=False)
             # 开始写图像
-            pm.writePNG(imgPath+str(pg) + ".png")
+            pm.save(imgPath+str(pg)+".png")
         pdf.close()
         self.ui.printf(f"pdf转换图片完成！")
         pngpath = imgPath.replace('\\', '/')
