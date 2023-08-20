@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
-
-from PyQt5.QtCore import QCoreApplication, QMetaObject, QRect
-from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QTextBrowser, QFileDialog, QWidget, QLineEdit
+from PySide6.QtCore import QCoreApplication, QMetaObject, QRect
+from PySide6.QtWidgets import QApplication, QLabel, QPushButton, QTextBrowser, QFileDialog, QWidget, QLineEdit
 
 
 class Ui_MainWindow(object):
@@ -154,6 +153,6 @@ class Ui_MainWindow(object):
 
     def printf(self, mes):
         self.textBrowser_result.append(mes)  # 在指定的区域显示提示信息
-        self.cursot = self.textBrowser_result.textCursor()
-        self.textBrowser_result.moveCursor(self.cursot.End)
+        self.cursor = self.textBrowser_result.textCursor()
+        self.textBrowser_result.setTextCursor(self.cursor)  # 设置新的光标
         QApplication.processEvents()
