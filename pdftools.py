@@ -7,6 +7,7 @@ import warnings
 from PySide6.QtWidgets import QApplication, QDialog
 from ui_mainwinmergepdf import Ui_MainWindow
 from pdf2docx import Converter
+from docx2pdf import convert
 import fitz
 
 
@@ -132,6 +133,25 @@ class MainDialog(QDialog):
             self.ui.printf("请先选择pdf文件")
         self.pdf2png(pdfpath)
 
+    # 使用pdf2docx将pdf转为docx
+    def getwordfile(self):
+        path = self.ui.path_word2pdf.text()
+        return path
+
+    def word2pdf(self):
+        self.ui.printf(f"开始word转换pdf...")
+        file = self.getwordfile().replace('\\', '/')
+        if file is None or file == '':
+            self.ui.printf("请先选择word文件")
+        else:
+            try:
+                docx_file = os.path.splitext(file)[0] + '.pdf'
+                convert(file,docx_file)
+   
+                self.ui.printf(f"word转换pdf完成！")
+                self.ui.printf(f"转换后pdf路径：{docx_file}\n")
+            except Exception as e:
+                self.ui.printf(f"转换异常：{e}")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
