@@ -8,7 +8,7 @@ class Ui_MainWindow(object):
         # 主窗口参数设置
         if not QDialog.objectName():
             QDialog.setObjectName(u"MainWindow")
-        QDialog.resize(1100, 560)
+        QDialog.resize(1100, 730)
         self.centralwidget = QWidget(QDialog)
         self.centralwidget.setObjectName(u"centralwidget")
 
@@ -82,6 +82,26 @@ class Ui_MainWindow(object):
         self.start_coverimage.setStyleSheet(u"font: 10pt \"Microsoft YaHei UI\";")
 
 
+         # word转PDFlabel标题
+        self.label_word2pdf = QLabel(self.centralwidget)
+        self.label_word2pdf.setObjectName(u"label_word2pdf")
+        self.label_word2pdf.setGeometry(QRect(100, 550, 121, 31))
+        self.label_word2pdf.setStyleSheet(u"font: 12pt \"Microsoft YaHei UI\";")
+        # 设置选择word文件夹
+        self.choose_word2pdf = QPushButton(self.centralwidget)
+        self.choose_word2pdf.setObjectName(u"choose_word2pdf")
+        self.choose_word2pdf.setGeometry(QRect(100, 580, 121, 31))
+        # 设置pdf文件路径
+        self.path_word2pdf = QPushButton(self.centralwidget)
+        self.path_word2pdf.setObjectName(u"word2pdf_path")
+        self.path_word2pdf.setGeometry(QRect(250, 580, 281, 31))
+        # 开始执行转换按钮
+        self.start_word2pdf = QPushButton(self.centralwidget)
+        self.start_word2pdf.setObjectName(u"start_word2pdf")
+        self.start_word2pdf.setGeometry(QRect(290, 630, 91, 31))
+        self.start_word2pdf.setStyleSheet(u"font: 10pt \"Microsoft YaHei UI\";")
+
+
         # 执行结果label
         self.label_result = QLabel(self.centralwidget)
         self.label_result.setObjectName(u"label_result")
@@ -112,9 +132,15 @@ class Ui_MainWindow(object):
         self.pdfpath.clicked.connect(QDialog.getpdffile)
         self.start_coverimage.clicked.connect(QDialog.pdf2image)
 
+        # word转PDF
+        self.choose_word2pdf.clicked.connect(self.choose_file_word)
+        self.path_word2pdf.clicked.connect(QDialog.getwordfile)
+        self.start_word2pdf.clicked.connect(QDialog.word2pdf)
+
     def retranslateUi(self, QDialog):
         _translate = QCoreApplication.translate
         QDialog.setWindowTitle(_translate("QDialog", u"PDF操作工具", None))
+
         self.label_title.setText(_translate("QDialog", u"<html><head/><body><p><span style=\" font-weight:700; color:#aa0000;\">PDF合并</span></p></body></html>", None))
         self.choosefolder.setText(_translate("QDialog", u"\u8bf7\u9009\u62e9PDF\u6587\u4ef6\u5939", None))
         self.start_merge.setToolTip(
@@ -139,6 +165,12 @@ class Ui_MainWindow(object):
         self.pdfpath.setText(_translate("QDialog", u"", None))
         self.start_coverimage.setText(_translate("QDialog", u"开始转换", None))
 
+
+        self.label_word2pdf.setText(_translate("QDialog", u"<html><head/><body><p><span style=\" font-weight:700; color:#aa0000;\">Word转PDF</span></p></body></html>", None))
+        self.choose_word2pdf.setText(_translate("QDialog", u"请选择Word文件", None))
+        self.path_word2pdf.setText(_translate("QDialog", u"", None))
+        self.start_word2pdf.setText(_translate("QDialog", u"开始转换", None))
+
     def choose_folder(self):
         pdffoler = QFileDialog.getExistingDirectory(None, "选取PDF文件夹", "D:/")
         self.outputpath.setText(pdffoler)
@@ -150,6 +182,11 @@ class Ui_MainWindow(object):
     def choose_file_image(self):
         pdffile_image = QFileDialog.getOpenFileName(None, "选择PDF文件", "D:/", "*.pdf")
         self.pdfpath.setText(pdffile_image[0])
+
+
+    def choose_file_word(self):
+        wordfile = QFileDialog.getOpenFileName(None, "选择Word文件", "D:/", "*.docx")
+        self.path_word2pdf.setText(wordfile[0])
 
     def printf(self, mes):
         self.textBrowser_result.append(mes)  # 在指定的区域显示提示信息
