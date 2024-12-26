@@ -67,7 +67,8 @@ class MainDialog(QDialog):
             self.ui.printf(f"合并后PDF路径：{outpath}")
         else:
             self.ui.printf("没有可以合并的PDF文件！")
-
+    
+    # 合并任务
     def start_task(self):
         outfile = self.pdfname()
         if outfile is None or outfile == '':
